@@ -73,7 +73,7 @@ def update_score():
 def move_food():
     while True:
         x = random.randint(-290, 290)
-        y = random.randint(-290, 230)
+        y = random.randint(-290, 250)
 
         collision = False
         if head.distance(x, y) < 20:
@@ -91,18 +91,28 @@ def move_food():
 def reset_game():
     global score, delay
 
-    time.sleep(1)
-    head.goto(0, 0)
-    head.direction = "stop"
-    delay = 0.3
-
+    food.hideturtle()
+    head.hideturtle()
     for segment in segments:
         segment.hideturtle()
+
+    pen.goto(0, 0)
+    pen.write("GAME OVER", align="center", font=("Courier", 36, "bold"))
+    screen.update()
+    time.sleep(1)
+    pen.clear()
+    pen.goto(0, 260)
+
+    head.goto(0, 0)
+    head.direction = "stop"
+    head.showturtle()
+    food.showturtle()
+    delay = 0.3
+
     segments.clear()
     score = 0
 
     update_score()
-
     move_food()
 
 
@@ -118,6 +128,7 @@ screen.onkeypress(go_down, "Down")
 screen.onkeypress(go_left, "Left")
 screen.onkeypress(go_right, "Right")
 
+move_food()
 
 while True:
     screen.update()
