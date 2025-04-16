@@ -6,6 +6,7 @@ A classic Snake Game using Python's turtle library. Use the arrow keys to move t
 - Food randomly appears across the screen. One segment is added on eating the food.
 - Score and high-score tracking
 - Game resets if the snake hits itself or the walls
+- Speed increases automatically when score increases by 30
 
 # How to Play
 - Clone this repostiory
