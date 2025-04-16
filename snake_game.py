@@ -2,40 +2,32 @@ import turtle
 import time
 import random
 
-screen = turtle.Screen()
-screen.title("Snake Game")
-screen.bgcolor("black")
-screen.setup(width=600, height=600)
-screen.tracer(0)
 
-head = turtle.Turtle()
-head.speed(0)
-head.shape("square")
-head.color("white")
-head.penup()
-head.goto(0, 0)
+def create_turtle(shape, color, position, hide=False):
+    t = turtle.Turtle()
+    t.speed(0)
+    t.shape(shape)
+    t.color(color)
+    t.penup()
+    t.goto(position)
+    if hide:
+        t.hideturtle()
+    return t
+
+
+head = create_turtle("square", "grey", (0, 0))
 head.direction = "stop"
 
-food = turtle.Turtle()
-food.speed(0)
-food.shape("circle")
-food.color("red")
-food.penup()
-food.goto(0, 100)
+food = create_turtle("circle", "red", (0, 100))
+
+pen = create_turtle("square", "white", (0, 260), hide=True)
+pen.write("Score: 0  High Score: 0", align="center", font=("Courier", 24, "normal"))
 
 segments = []
 
 score = 0
 high_score = 0
 delay = 0.3
-
-pen = turtle.Turtle()
-pen.speed(0)
-pen.color("white")
-pen.penup()
-pen.hideturtle()
-pen.goto(0, 260)
-pen.write("Score: 0  High Score: 0", align="center", font=("Courier", 24, "normal"))
 
 
 def go_up():
@@ -114,11 +106,18 @@ def reset_game():
     move_food()
 
 
+screen = turtle.Screen()
+screen.title("Snake Game")
+screen.bgcolor("black")
+screen.setup(width=600, height=600)
+screen.tracer(0)
+
 screen.listen()
 screen.onkeypress(go_up, "Up")
 screen.onkeypress(go_down, "Down")
 screen.onkeypress(go_left, "Left")
 screen.onkeypress(go_right, "Right")
+
 
 while True:
     screen.update()
@@ -134,11 +133,7 @@ while True:
     if head.distance(food) < 20:
         move_food()
 
-        new_segment = turtle.Turtle()
-        new_segment.speed(0)
-        new_segment.shape("square")
-        new_segment.color("grey")
-        new_segment.penup()
+        new_segment = create_turtle("square", "white", (head.xcor(), head.ycor()))
         segments.append(new_segment)
 
         score += 10
