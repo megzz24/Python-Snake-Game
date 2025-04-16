@@ -27,6 +27,7 @@ segments = []
 
 score = 0
 high_score = 0
+delay = 0.3
 
 pen = turtle.Turtle()
 pen.speed(0)
@@ -96,11 +97,12 @@ def move_food():
 
 
 def reset_game():
-    global score
+    global score, delay
 
     time.sleep(1)
     head.goto(0, 0)
     head.direction = "stop"
+    delay = 0.3
 
     for segment in segments:
         segment.hideturtle()
@@ -142,6 +144,10 @@ while True:
         score += 10
         if score > high_score:
             high_score = score
+
+        if score % 30 == 0:
+            delay = max(0.1, delay - 0.02)
+
         update_score()
 
     for i in range(len(segments) - 1, 0, -1):
@@ -158,4 +164,4 @@ while True:
         if segment.distance(head) < 20:
             reset_game()
 
-    time.sleep(0.2)
+    time.sleep(delay)
