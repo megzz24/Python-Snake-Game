@@ -1,6 +1,7 @@
 import turtle
 import time
 import random
+import os
 
 
 def create_turtle(shape, color, position, hide=False):
@@ -13,21 +14,6 @@ def create_turtle(shape, color, position, hide=False):
     if hide:
         t.hideturtle()
     return t
-
-
-head = create_turtle("square", "grey", (0, 0))
-head.direction = "stop"
-
-food = create_turtle("circle", "red", (0, 100))
-
-pen = create_turtle("square", "white", (0, 260), hide=True)
-pen.write("Score: 0  High Score: 0", align="center", font=("Courier", 24, "normal"))
-
-segments = []
-
-score = 0
-high_score = 0
-delay = 0.3
 
 
 def go_up():
@@ -62,6 +48,8 @@ def move():
 
 
 def update_score():
+    global score, high_score
+
     pen.clear()
     pen.write(
         f"Score: {score}  High Score: {high_score}",
@@ -91,6 +79,8 @@ def move_food():
 def reset_game():
     global score, delay
 
+    save_highscore()
+
     food.hideturtle()
     head.hideturtle()
     for segment in segments:
@@ -116,6 +106,18 @@ def reset_game():
     move_food()
 
 
+def load_highscore():
+    if not os.path.exists("highscore.txt"):
+        return 0
+    with open("highscore.txt", "r") as f:
+        return int(f.read())
+
+
+def save_highscore():
+    with open("highscore.txt", "w") as f:
+        f.write(str(high_score))
+
+
 screen = turtle.Screen()
 screen.title("Snake Game")
 screen.bgcolor("black")
@@ -127,6 +129,20 @@ screen.onkeypress(go_up, "Up")
 screen.onkeypress(go_down, "Down")
 screen.onkeypress(go_left, "Left")
 screen.onkeypress(go_right, "Right")
+
+head = create_turtle("square", "grey", (0, 0))
+head.direction = "stop"
+
+food = create_turtle("circle", "red", (0, 100))
+
+segments = []
+
+score = 0
+high_score = load_highscore()
+delay = 0.25
+
+pen = create_turtle("square", "white", (0, 260), hide=True)
+update_score()
 
 move_food()
 
@@ -152,7 +168,7 @@ while True:
             high_score = score
 
         if score % 30 == 0:
-            delay = max(0.1, delay - 0.02)
+            delay = max(0.05, delay - 0.02)
 
         update_score()
 
